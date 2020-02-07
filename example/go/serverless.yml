@@ -1,0 +1,22 @@
+service: myservice
+
+provider:
+  name: aws
+  runtime: go1.x
+  environment:
+    DATABASE: "mydatabase"
+    TABLE_NAME: table-${opt:stage, self:provider.stage}
+
+functions:
+  hello:
+    handler: bin/hello
+    events:
+      - http:
+          path: hello/{id}
+          method: get
+  world:
+    handler: bin/world
+    events:
+      - http:
+          path: /world
+          method: get
