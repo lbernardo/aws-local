@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  aws-local-apigateway:
+    build: ./Docker/service/apigateway
+    ports:
+      - 3000:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Set project path
+      #- .:/var/app
+    environment:
+      - VOLUME=$PWD # Source project path [required]
+      - HOST=0.0.0.0
+      - PORT=3000
