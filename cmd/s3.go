@@ -1,11 +1,8 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/lbernardo/aws-local/pkg/s3"
 	"github.com/spf13/cobra"
-	"log"
-	"net/http"
-	"strings"
 )
 
 var s3Command = &cobra.Command{
@@ -14,22 +11,29 @@ var s3Command = &cobra.Command{
 	Run:   Executes3Command,
 }
 func init() {
+	s3Command.Flags().StringVarP(&volumeS3, "volume", "v", "", "Volume  for storage S3")
+	s3Command.PersistentFlags().StringVar(&portS3, "port", "3002", "port usage [default 3002]")
+	s3Command.PersistentFlags().StringVar(&hostS3, "host", "0.0.0.0", "host usage [default 0.0.0.0]")
+	s3Command.Flags().StringVar(&networkS3, "network", "", "Set network name usage")
+
+	s3Command.MarkFlagRequired("volume")
+
 	rootCmd.AddCommand(s3Command)
 }
 
+var volumeS3 string
+var portS3 string
+var hostS3 string
+var networkS3 string
+
+
 func Executes3Command(cmd *cobra.Command, args []string) {
-	//route := mux.NewRouter()
 
-	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
-		if request.Method == "PUT" {
-			ss := strings.Split(request.RequestURI,"/")
-			filename := ss[len(ss)-1]
-			fmt.Println("filename",filename)
+	s3.NewS3StorageLocal(s3.ParamsS3{
+		Volume: volumeS3,
+		Host: hostS3,
+		Port: portS3,
+		Network: networkS3,
+	}).StartS3Storage()
 
-		}
-		writer.WriteHeader(200)
-		writer.Write([]byte("OK"))
-	});
-
-	log.Fatalln(http.ListenAndServe("0.0.0.0:3002",nil))
 }
