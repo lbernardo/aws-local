@@ -14,3 +14,17 @@ services:
       - HOST=0.0.0.0
       - PORT=3001
       - ENVFILE=.env
+    entrypoint: ["awslocal","api-gateway","--volume","$VOLUME"]
+  aws-local-s3:
+    image: lbernardo12/awslocal
+    ports:
+      - 3002:3002
+    volumes:
+      - /var/mystorage:/var/mystorage
+      # Set project path
+      - .:/var/app
+    environment:
+      - VOLUME=$PWD
+      - HOST=0.0.0.0
+      - PORT=3002
+    entrypoint: ["awslocal","s3","--volume","$VOLUME"]
