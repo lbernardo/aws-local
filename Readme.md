@@ -27,7 +27,7 @@ Flags:
 
 ---
 
-###API Gateway
+### API Gateway
 Use serverless framework for test API Gateway + Lambda
 
 ```
