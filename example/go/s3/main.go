@@ -5,7 +5,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"os"
 )
@@ -23,15 +22,8 @@ func main() {
 
 	sess, err := session.NewSession(config)
 
-	iter := s3manager.NewDeleteListIterator(sess, &s3.ListObjectsInput{
-		Bucket: aws.String("myBucket"),
-
-	})
-
 	// Create an uploader with the session and default options
 	uploader := s3manager.NewUploader(sess)
-	d := s3manager.NewBatchDelete(sess)
-	d.Delete(aws.Context(),)
 
 	f, err  := os.Open(filename)
 	if err != nil {
