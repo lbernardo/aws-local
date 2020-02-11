@@ -185,3 +185,84 @@ func main() {
 	fmt.Println(*result.Parameter.Value)
 }
 ```
+
+## Create new modules
+
+
+##### Create command
+
+*pkg/mymodule/mymodule.go*
+```go
+package mymodule
+
+import (
+	"fmt"
+	"net/http"
+)
+
+type MyModule struct {
+	params Params
+}
+
+func NewMyModule(params Params) *MyModule {
+	return &MyModule{
+		params: params,
+	}
+}
+
+
+func (m *MyModule) StartModule() {
+	fmt.Printf("Start MyModule server %v:%v\n",m.params.Host, m.params.Port)
+	http.ListenAndServe(fmt.Sprintf("%v:%v",m.params.Host, m.params.Port),nil)
+}
+```
+
+*pkg/mymodule/model.go*
+```go
+package mymodule
+
+type Params struct {
+	Host string
+	Port string
+}
+```
+
+*cmd/mymodule.go*
+```go
+package cmd
+
+import (
+	"github.com/lbernardo/aws-local/pkg/mymodule"
+	"github.com/spf13/cobra"
+)
+
+var myModuleCommand = &cobra.Command{
+	Use:   "mymodule",
+	Short: "My module describe",
+	Run:   ExecuteMyModuleCommand,
+}
+func init() {
+	myModuleCommand.PersistentFlags().StringVar(&portMyModule, "port", "3004", "port usage [default 3002]")
+	myModuleCommand.PersistentFlags().StringVar(&hostMyModule, "host", "0.0.0.0", "host usage [default 0.0.0.0]")
+
+	rootCmd.AddCommand(myModuleCommand)
+}
+
+var portMyModule string
+var hostMyModule string
+
+
+func ExecuteMyModuleCommand(cmd *cobra.Command, args []string) {
+
+	mymodule.NewMyModule(mymodule.Params{
+		Host: hostMyModule,
+		Port: portMyModule,
+	}).StartModule()
+
+}
+```
+
+*Execute mymodule*
+```
+awslocal mymodule
+```
