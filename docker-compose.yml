@@ -2,7 +2,7 @@ version: "3"
 
 services:
   aws-local-apigateway:
-    image: lbernardo12/awslocal
+    image: lbernardo/awslocal
     ports:
       - 3001:3001
     volumes:
@@ -14,7 +14,7 @@ services:
       - HOST=0.0.0.0
       - PORT=3001
       - ENVFILE=.env
-    entrypoint: ["awslocal","api-gateway","--volume","$VOLUME"]
+    entrypoint: ["awslocal","api-gateway","--volume","$VOLUME","--port","3001"]
   aws-local-s3:
     image: lbernardo12/awslocal
     ports:
@@ -27,4 +27,4 @@ services:
       - VOLUME=$PWD
       - HOST=0.0.0.0
       - PORT=3002
-    entrypoint: ["awslocal","s3","--volume","$VOLUME"]
+    entrypoint: ["awslocal"]

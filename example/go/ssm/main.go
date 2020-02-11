@@ -3,27 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/lbernardo/aws-local/awslocal"
 )
 
 func main() {
 
+	awslocal.SetLocalDev() // Set env AWSLOCAL_DEV=OK
 
-	creds := credentials.NewStaticCredentials("none","none","none")
+	s,_ := session.NewSession(&aws.Config{Region: aws.String("us-east-1")})
 
-	config := &aws.Config{
-		Endpoint: aws.String("http://0.0.0.0:3003"),
-		Region:   aws.String("us-east-1"),
-		Credentials:creds,
-	}
-
-	sess, err := session.NewSession(config)
-
-	if err != nil {
-		panic(err)
-	}
+	sess := awslocal.GetSessionAWS("http://0.0.0.0:3003", s)
 
 	ssmManager := ssm.New(sess)
 	query := ssm.GetParameterInput{
@@ -31,7 +22,7 @@ func main() {
 		WithDecryption: aws.Bool(true),
 	}
 
-	result, err := ssmManager.GetParameter(&query)
+	result, _ := ssmManager.GetParameter(&query)
 
 	fmt.Println(*result.Parameter.Value)
 }
