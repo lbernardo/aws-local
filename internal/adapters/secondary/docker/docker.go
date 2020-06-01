@@ -5,6 +5,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
@@ -12,9 +16,6 @@ import (
 	"github.com/docker/docker/pkg/stdcopy"
 	"github.com/lbernardo/aws-local/internal/helpers"
 	"github.com/lbernardo/aws-local/pkg/core"
-	"io"
-	"os"
-	"strings"
 )
 
 func PullImageDocker(runtime string) {
@@ -75,7 +76,9 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 
 	if content.Net != "" {
 		networkingConfig.EndpointsConfig = map[string]*network.EndpointSettings{
-			"net": &network.EndpointSettings{},
+			"net": &network.EndpointSettings{
+				NetworkID: content.Net,
+			},
 		}
 	}
 
