@@ -43,9 +43,9 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 	var result core.ResultLambdaRequest
 	var output bytes.Buffer
 	var contentRequest core.ContentRequest
-	//buf := new(bytes.Buffer)
-	//buf.ReadFrom(content.Body)
-	bodyStr := ""
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(content.Body)
+	bodyStr := buf.String()
 	var strEnv []string
 
 	imageName := "lambci/lambda:" + content.Runtime
