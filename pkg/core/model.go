@@ -9,6 +9,7 @@ type ExecuteLambdaRequest struct {
 	Runtime     string
 	Environment map[string]string
 	Body        io.ReadCloser
+	Headers     map[string]string
 	Parameters  map[string]string
 }
 
@@ -22,8 +23,8 @@ type ResultLambdaRequest struct {
 type ContentRequest struct {
 	Body           string            `json:"body"`
 	PathParameters map[string]string `json:"pathparameters"`
+	Headers        map[string]string `json:"headers"`
 }
-
 
 type Serverless struct {
 	Functions map[string]Functions `json:"functions"`

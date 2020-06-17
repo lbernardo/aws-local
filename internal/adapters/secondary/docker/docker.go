@@ -64,6 +64,7 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 	bodyStr = strings.ReplaceAll(bodyStr, "\n", "")
 	contentRequest.Body = bodyStr
 	contentRequest.PathParameters = content.Parameters
+	contentRequest.Headers = content.Headers
 
 	jsonRequest, _ := json.Marshal(contentRequest)
 

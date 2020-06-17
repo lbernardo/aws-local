@@ -2,12 +2,13 @@ package apigateway
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/lbernardo/aws-local/internal/adapters/secondary/docker"
-	"github.com/lbernardo/aws-local/pkg/core"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/lbernardo/aws-local/internal/adapters/secondary/docker"
+	"github.com/lbernardo/aws-local/pkg/core"
 )
 
 func StartApiGateway(params ParamsApiGateway) {
@@ -25,11 +26,18 @@ func StartApiGateway(params ParamsApiGateway) {
 
 		fff := func(w http.ResponseWriter, r *http.Request) {
 			parameters := mux.Vars(r)
+			headers := map[string]string{}
+
+			for key, _ := range r.Header {
+				headers[key] = r.Header.Get(key)
+			}
+
 			result, off := docker.ExecuteDockerLambda(core.ExecuteLambdaRequest{
 				Volume:      params.Volume,
 				Net:         params.Network,
 				Handler:     function,
 				Runtime:     params.Serverless.Provider.Runtime,
+				Headers:     headers,
 				Environment: params.Serverless.Provider.Environment,
 				Body:        r.Body,
 				Parameters:  parameters,
