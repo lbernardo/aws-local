@@ -12,6 +12,7 @@ Usage:
 Available Commands:
   api-gateway API Gateway with Lambda
   help        Help about any command
+  lambda      Run Lambda event
   s3          S3
   ssm         Security Secret Manager (SSM)
 
@@ -24,6 +25,7 @@ Flags:
 - api-gateway
 - S3
 - SSM
+- lambda
 
 ---
 
@@ -184,6 +186,30 @@ func main() {
 
 	fmt.Println(*result.Parameter.Value)
 }
+```
+
+### lambda
+Use lambda execute event
+
+```
+Run Lambda event
+
+Usage:
+  awslocal lambda [bin] [flags]
+
+Flags:
+      --body string      Content body
+      --env string       File for using environment variables
+  -h, --help             help for lambda
+      --runtime string   Runtime lambda (default "go1.x")
+  -v, --volume string    Volume project (Ep: --volume $PWD) (required)
+
+```
+
+
+#### Start service
+```bash
+awslocal lambda bin/app --runtime go1.x --volume $PWD --env .local.env
 ```
 
 ## Create new modules

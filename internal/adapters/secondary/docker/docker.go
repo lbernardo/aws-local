@@ -43,9 +43,12 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 	var result core.ResultLambdaRequest
 	var output bytes.Buffer
 	var contentRequest core.ContentRequest
-	buf := new(bytes.Buffer)
-	buf.ReadFrom(content.Body)
-	bodyStr := buf.String()
+	bodyStr := ""
+	if content.Body != nil {
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(content.Body)
+		bodyStr = buf.String()
+	}
 	var strEnv []string
 
 	imageName := "lambci/lambda:" + content.Runtime
@@ -62,6 +65,7 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 
 	bodyStr = strings.ReplaceAll(bodyStr, "\t", "")
 	bodyStr = strings.ReplaceAll(bodyStr, "\n", "")
+
 	contentRequest.Body = bodyStr
 	contentRequest.PathParameters = content.Parameters
 	contentRequest.Headers = content.Headers
