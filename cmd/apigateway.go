@@ -19,6 +19,7 @@ var port string
 var host string
 var network string
 var enviroment string
+var dns string
 
 func init() {
 	apiGatewayCommand.PersistentFlags().StringVar(&serverlessFile, "yaml","serverless.yml", "Serverless file yaml")
@@ -27,6 +28,7 @@ func init() {
 	apiGatewayCommand.PersistentFlags().StringVar(&host, "host", "0.0.0.0", "host usage [default 0.0.0.0]")
 	apiGatewayCommand.PersistentFlags().StringVar(&enviroment, "env", "", "File for using environment variables other than serverless. Can replace serverless variables")
 	apiGatewayCommand.Flags().StringVar(&network, "network", "", "Set network name usage")
+	apiGatewayCommand.Flags().StringVar(&dns,"dns","", "Set dns")
 
 	apiGatewayCommand.MarkFlagRequired("volume")
 
@@ -40,6 +42,7 @@ func ExecuteApiGateway(cmd *cobra.Command, args []string) {
 		Port:           port,
 		Host:           host,
 		Network:        network,
+		DNS: dns,
 	}
 	apigateway.StartApiGateway(params)
 }

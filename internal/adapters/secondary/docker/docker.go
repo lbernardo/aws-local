@@ -87,13 +87,19 @@ func ExecuteDockerLambda(content core.ExecuteLambdaRequest) (core.ResultLambdaRe
 		}
 	}
 
+	hostConfig := &container.HostConfig{
+		Binds: []string{content.Volume + ":/var/task"},
+	}
+
+	if content.DNS != "" {
+		hostConfig.DNS = []string{content.DNS}
+	}
+
 	resp, err := cli.ContainerCreate(ctx, &container.Config{
 		Image: imageName,
 		Cmd:   executeCommand,
 		Env:   strEnv,
-	}, &container.HostConfig{
-		Binds: []string{content.Volume + ":/var/task"},
-	}, networkingConfig, "")
+	}, hostConfig, networkingConfig, "")
 	if err != nil {
 		helpers.PrintError(err)
 	}

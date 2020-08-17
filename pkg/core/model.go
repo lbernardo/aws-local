@@ -5,6 +5,7 @@ import "io"
 type ExecuteLambdaRequest struct {
 	Volume      string
 	Net         string
+	DNS			string
 	Handler     string
 	Runtime     string
 	Environment map[string]string

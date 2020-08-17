@@ -41,6 +41,7 @@ func StartApiGateway(params ParamsApiGateway) {
 				Environment: params.Serverless.Provider.Environment,
 				Body:        r.Body,
 				Parameters:  parameters,
+				DNS: params.DNS,
 			})
 			if result.StatusCode == 0 {
 				w.WriteHeader(400)
