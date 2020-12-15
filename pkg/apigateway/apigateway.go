@@ -57,8 +57,10 @@ func StartApiGateway(params ParamsApiGateway) {
 			return
 		}
 		route.HandleFunc(path, fff).Methods(method)
+		route.HandleFunc(path, func(writer http.ResponseWriter, request *http.Request) {}).Methods("OPTIONS")
 	}
 
 	fmt.Printf("Start server API Gateway + lambda %v:%v\n", params.Host, params.Port)
+
 	log.Fatal(http.ListenAndServe(fmt.Sprintf("%v:%v", params.Host, params.Port), route))
 }
